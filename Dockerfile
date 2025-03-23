@@ -24,12 +24,16 @@ RUN apt-get update && \
         curl && \
     rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip and install Python packages
-RUN pip3 install --break-system-packages pip wheel \
-    && pip3 install --break-system-packages --upgrade cryptography cffi \
-    && pip3 install --break-system-packages --upgrade mitogen jmespath \
-    && pip3 install --break-system-packages --upgrade pywinrm \
-    && pip3 install --break-system-packages $pip_packages
+# Create virtual environment
+RUN python3 -m venv /opt/venv
+
+# Install Python packages inside venv
+RUN /opt/venv/bin/pip install --upgrade pip wheel \
+ && /opt/venv/bin/pip install cryptography cffi mitogen jmespath pywinrm \
+ && /opt/venv/bin/pip install $pip_packages
+
+# Set PATH to use virtualenv by default
+ENV PATH="/opt/venv/bin:$PATH"
 
 # Set localhost Ansible inventory
 RUN mkdir -p /etc/ansible && \
