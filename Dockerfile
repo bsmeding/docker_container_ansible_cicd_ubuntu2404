@@ -5,11 +5,12 @@ ENV container=docker
 ENV DEBIAN_FRONTEND=noninteractive
 ENV pip_packages "ansible==10.4.0 yamllint pynautobot pynetbox jmespath netaddr"
 
-# Install system packages
+# Install system packages (Adding 3.12-venv for Virtualenv)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         sudo \
         python3 \
+        python3.12-venv \ 
         python3-pip \
         python3-dev \
         build-essential \
